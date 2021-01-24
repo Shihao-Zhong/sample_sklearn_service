@@ -1,0 +1,47 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Simple iris prediction</title>
+
+    <label for="sepalLength">花萼长度:</label><br>
+    <input type="text" id="sepalLength" name="sepalLength"><br>
+    <label for="sepalWidth">花萼宽度:</label><br>
+    <input type="text" id="sepalWidth" name="sepalWidth"><br>
+    <label for="petalLength">花瓣长度:</label><br>
+    <input type="text" id="petalLength" name="petalLength"><br>
+    <label for="petalWidth">花瓣宽度:</label><br>
+    <input type="text" id="petalWidth" name="petalWidth"><br>
+    <button type="button" onclick="submit()">Submit</button>
+  <div id="result"></div>
+
+
+</head>
+
+<body>
+  <script>
+
+    function submit() {
+
+      let body = {
+        sepalLength: document.getElementById("sepalLength").value || 0,
+        sepalWidth: document.getElementById("sepalWidth").value || 0,
+        petalLength: document.getElementById("petalLength").value || 0,
+        petalWidth: document.getElementById("petalWidth").value || 0
+      }
+      let url = "http://127.0.0.1:5000/predictions";
+      let xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("result").innerHTML = `花瓣类型：${JSON.parse(this.responseText)["result"]}`;
+        }
+      };
+      xhr.open("POST", url, true)
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify(body))
+    }
+
+
+  </script>
+</body>
+</html>
